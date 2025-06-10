@@ -23,8 +23,8 @@ def serve_login_template(
     if request.cookies.get("token"):
         return RedirectResponse("/home", status_code=303)
     return templates.TemplateResponse(
+        request,
         "auth/login.html",
-        context={"request": request},
         block_name=block_name,
     )
 

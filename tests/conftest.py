@@ -41,9 +41,11 @@ def session():
     ENGINE.dispose()
 
 
-@pytest.fixture(scope="session", autouse=True)
-def migrate(session):
-    migration = Path("src/migrations") / "0000_init.sql"
-    with open(file=migration, mode="r") as migration_file:
-        with session.begin():
+@pytest.fixture(scope="function", autouse=True)
+def create_schema_if_not_exists(session):
+    migrations_dir = Path("src/migrations")
+    migrations_list = list(migrations_dir.iterdir())
+    for migration in sorted(migrations_list):
+        with open(file=migration, mode="r", encoding="utf-8") as migration_file:
             session.execute(text(migration_file.read()))
+    session.commit()
