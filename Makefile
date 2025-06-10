@@ -8,4 +8,4 @@ local-run:
 
 .PHONY: tests
 tests:
-	pytest
+	python3 -m pytest

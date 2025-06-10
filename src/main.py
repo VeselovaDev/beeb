@@ -6,12 +6,14 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from sqlalchemy import URL, MetaData, create_engine
 from sqlalchemy.orm import DeclarativeBase
-
-load_dotenv()
+from auth.routes import auth_router
 
 
 class AlchemyBaseModel(DeclarativeBase):
     metadata = MetaData(schema="main")
+
+
+load_dotenv()
 
 
 @asynccontextmanager
@@ -32,6 +34,8 @@ async def lifespan(app: FastAPI):
 
 def build_app():
     app = FastAPI()
+
+    app.include_router(auth_router)
 
     @app.get("/ping")
     def ping():
