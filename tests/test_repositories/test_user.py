@@ -1,4 +1,5 @@
 from sqlalchemy import select
+
 from src.auth.models import User
 from src.auth.utils import hash_password
 from src.repositories.user import UserRepo
@@ -12,7 +13,7 @@ def test_create_user(session):
 
     # create a user
     repo = UserRepo(session)
-    repo.create("boop", hash_password("shoop"))
+    repo.create("boop", "shoop")
 
     # fetch the new user
     statement = select(User)
@@ -49,14 +50,8 @@ def test_fetch_user_by_name_when_no_such_user_exists(session):
 
 def test_user_login_success(session):
     repo = UserRepo(session)
-    # repo.create("imauser", hash_password("verysecret"))
+    repo.create("imauser", "verysecret")
 
-    # user = repo.fetch_by("imauser")
+    user = repo.login("imauser", "verysecret")
 
-    # assert is_same_password("verysecret", user.password_hash_sum)
-
-    # assert user.password_hash_sum == 1
-
-    # user = repo.login("imauser", "verysecret")
-
-    # assert user.username == "imauser"
+    assert user.username == "imauser"

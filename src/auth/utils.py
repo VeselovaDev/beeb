@@ -1,5 +1,5 @@
-from hashlib import sha256
 import os
+from hashlib import sha256
 
 
 def hash_password(password: str) -> bytes:
