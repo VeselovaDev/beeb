@@ -1,0 +1,77 @@
+{% extends "base.html"%}
+{% block body %}
+<div class="container">
+    {% if exception %}
+    <div class="alert alert-danger" role="alert">
+        Произошла ошибка! Код ошибки: {{ status_code }}. {{ exception}} 
+    </div>
+    {% endif %}
+    <div class="row justify-content-center pt-5">
+        <div class="col-4">
+            <div class="card"">
+                <div class="card-body">
+                    <form hx-post="/login" hx-target="body" hx-push-url="false">
+                        {% if not invalid_email %}
+                        <div class="row justify-content-center" hx-target="this" hx-swap="outerHTML">
+                            <div class="form-group mt-5 mb-3 col-9">
+                                <input type="text" class="form-control" id="input-email" name="email"
+                                    placeholder="Почта" required>
+                            </div>
+                        {% endif %}
+                        {% if invalid_email %}
+                        <div class="row justify-content-center" hx-target="this" hx-swap="outerHTML">
+                            <div class="form-group mt-5 mb-3 col-9">
+                                <input 
+                                type="text" 
+                                class="form-control" 
+                                id="input-email" 
+                                name="email" 
+                                placeholder="Почта" 
+                                value={{ invalid_email }}
+                                required>
+                                <div>{{ email_error }}</div>
+                            </div>
+                        {% endif %}
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="form-group mb-5 col-9">
+                                <input type="text" class="form-control" id="input-password" name="password"
+                                    placeholder="Пароль" required>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="form-group mt-5 mb-3 col-9">
+                                <button type="submit" class="btn btn-primary w-100" class="btn" id="submit-button">Войти</button>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center">
+                        <div class="col-8">
+                            <div class="separator">or</div>
+                        </div>
+                        </div>                   
+                        <div class="row justify-content-center">
+                            <div class="form-group mt-3 mb-5 col-9">
+                                <button 
+                                hx-get="/signup" 
+                                hx-target="#modals-here" 
+                                hx-trigger="click" 
+                                hx-push-url="false"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modals-here" 
+                                class="btn btn-secondary w-100">Зарегистрироваться</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="modals-here" class="modal modal-blur fade" style="display: none" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content"></div>
+    </div>
+</div>
+{% endblock %}
