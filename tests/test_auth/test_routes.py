@@ -18,4 +18,6 @@ def test_post_login_route_exists(unauthenticated_client):
     response = unauthenticated_client.post(
         "/login", data={"username": "lol", "password": "kek"}
     )
+
+    # if there are no Exceptions, the page always redirects /home
     assert response.status_code == 303
