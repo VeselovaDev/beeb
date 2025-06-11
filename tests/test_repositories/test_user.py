@@ -1,5 +1,7 @@
+import pytest
 from sqlalchemy import select
 
+from src.auth.exceptions import UserNotFound, WrongPassword
 from src.auth.models import User
 from src.auth.utils import hash_password
 from src.repositories.user import UserRepo
@@ -36,15 +38,13 @@ def test_fetch_user_by_name_when_user_exists(session):
     repo = UserRepo(session)
     repo.create("shlorp", hash_password("blorp"))
 
-    user = repo.fetch_by("shlorp")
+    user = repo.get_by_name("shlorp")
     assert user.username == "shlorp"
 
 
 def test_fetch_user_by_name_when_no_such_user_exists(session):
     repo = UserRepo(session)
-
-    # try to fetch the user
-    user = repo.fetch_by("glorp")
+    user = repo.get_by_name("glorp")
     assert not user
 
 
@@ -55,3 +55,17 @@ def test_user_login_success(session):
     user = repo.login("imauser", "verysecret")
 
     assert user.username == "imauser"
+
+
+def test_user_login_no_user(session):
+    with pytest.raises(UserNotFound):
+        repo = UserRepo(session)
+        repo.login("nosuchuser", "password")
+
+
+def test_user_login_wrong_password(session):
+    repo = UserRepo(session)
+    repo.create("forgetful_user", "strongpassword")
+    with pytest.raises(WrongPassword):
+        repo = UserRepo(session)
+        repo.login("forgetful_user", "whatwasit")
