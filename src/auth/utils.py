@@ -13,7 +13,3 @@ def hash_password(password: str) -> bytes:
     password_hash = hash_object.hexdigest()
 
     return str.encode(password_hash)
-
-
-def is_same_password(password: str, password_hash_sum: bytes) -> bool:
-    return hash_password(password) == password_hash_sum

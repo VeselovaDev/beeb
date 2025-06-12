@@ -8,4 +8,4 @@ class User(AlchemyBaseModel):
     __tablename__ = "users"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     username: Mapped[str] = mapped_column(String(255), nullable=False, unique=True)
-    password_hash_sum: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
+    password_hash: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
